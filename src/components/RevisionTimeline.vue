@@ -6,13 +6,22 @@
           class="revision-mark"
           v-for="(revision, i) in revisions"
           :key="i"
-          :class="{ selected: revision === selectedRevision }"
           x="0"
           y="10"
           width="15"
           height="15"
           :style="{ transform: `translate(${xScale(revision.timestamp)}px, 0) rotate(45deg)` }"
           @click="onRevisionMarkSelect(revision)"
+        />
+        <rect
+          v-if="selectedRevision"
+          class="revision-mark selected"
+          x="0"
+          y="10"
+          width="15"
+          height="15"
+          :style="{ transform: `translate(${xScale(selectedRevision.timestamp)}px, 0) rotate(45deg)` }"
+          @click="onRevisionMarkSelect(selectedRevision)"
         />
       </g>
     </svg>
