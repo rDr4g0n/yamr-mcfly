@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div style="background-color: #111;" v-if="false">
+    <div style="background-color: #111;">
       <div class="item-header-wrap">
         <div class="item-header">
           <div class="item-name">{{ itemName }}</div>
@@ -14,9 +14,13 @@
       </div>
 
       <div class="revision-timeline-wrap">
-        <div class="revision-timeline">
-          {{ revisions.length }} Revisions
-        </div>
+        <RevisionTimeline
+          :revisions="revisions"
+          :start="start"
+          :end="end"
+          :selectedRevision="selectedRevision"
+          @selectRevision="selectRevision"
+        />
       </div>
     </div>
 
@@ -82,6 +86,7 @@ import Vue from "vue"
 import moment from "moment"
 import { data } from "./data"
 import RevisionCard from "./components/RevisionCard"
+import RevisionTimeline from "./components/RevisionTimeline"
 
 Vue.filter("toDate", val => moment(val).format("MMMM Do, YYYY"))
 Vue.filter("toTime", val => moment(val).format("h:mm a"))
@@ -89,15 +94,17 @@ Vue.filter("toTime", val => moment(val).format("h:mm a"))
 export default {
   name: 'app',
   components: {
-    RevisionCard
+    RevisionCard,
+    RevisionTimeline,
   },
   data(){
+    data.sort((a, b) => a.timestamp - b.timestamp)
     return {
       itemType: "E",
       itemId: "1234",
       itemName: "testrail.zenoss.loc",
-      start: null,
-      end: null,
+      start: data[0].timestamp,
+      end: data[data.length-1].timestamp,
       revisions: data,
       prevRevision: null,
       selectedRevision: null,
@@ -172,9 +179,7 @@ export default {
 
 .revision-timeline-wrap {
   padding-top: 45px;
-  text-align: center;
   height: 100px;
-  border: solid 1px black;
 }
 
 .revision-viewer-wrap {

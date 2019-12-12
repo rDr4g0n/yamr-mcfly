@@ -2,7 +2,7 @@
 
 ## TODO
 
-- comparison diff is reversed
+- comparison diff is reversed :(
 - action icons
 - field renderer for ids (links)
 - section renderer (metric, event, entity)
