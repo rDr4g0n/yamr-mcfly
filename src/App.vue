@@ -4,13 +4,15 @@
       <div class="item-header-wrap">
         <div class="item-header">
           <div class="item-name">{{ itemName }}</div>
-          <div class="item-type">{{ itemType }}</div>
+          <div class="item-type">{{ labelForType(itemType) }}</div>
         </div>
+        <!--
         <div class="time-range">
           <input class="time-range-start" v-model="start">
           <span>to</span>
           <input class="time-range-start" v-model="end">
         </div>
+        -->
       </div>
 
       <div class="revision-timeline-wrap">
@@ -30,6 +32,7 @@
           v-if="prevRevision"
           title="Previous Revision"
           :timestamp="prevRevision.timestamp"
+          :itemType="itemType"
           :fields="prevRevision.fields"
           :diffFields="selectedRevision.fields"
           :diffOnly="true"
@@ -49,6 +52,7 @@
           v-if="selectedRevision"
           :title="selectedRevisionTitle"
           :timestamp="selectedRevision.timestamp"
+          :itemType="itemType"
           :fields="selectedRevision.fields"
           :diffFields="diffRevision ? diffRevision.fields : null"
         >
@@ -63,6 +67,7 @@
           class="compact-revision"
           title="Next Revision"
           :timestamp="nextRevision.timestamp"
+          :itemType="itemType"
           :fields="nextRevision.fields"
           :diffFields="selectedRevision.fields"
           :diffOnly="true"
@@ -133,6 +138,13 @@ export default {
     compareRevision(revision, title){
       this.diffRevision = revision
       this.diffRevisionTitle = title
+    },
+    labelForType(type){
+      return {
+        "E": "Entity",
+        "M": "Metric",
+        "V": "Event",
+      }[type]
     }
   },
   mounted(){
@@ -154,6 +166,8 @@ export default {
   --primary-text: #DDD;
   --secondary-text: #999;
   --base-margin: 10px;
+  --action: deeppink;
+  --action-reverse: white;
 }
 
 #app {
@@ -168,18 +182,31 @@ export default {
 .item-header-wrap {
   width: 100%;
   max-width: 800px;
-  margin: 0 auto 40px auto;
+  margin: 0 auto 20px auto;
 }
 
 .item-header-wrap {
   display: flex;
   justify-content: space-between;
-  padding-top: 40px;
+  padding-top: 20px;
+}
+
+.item-header {
+  display: flex;
+  align-items: baseline;
+}
+.item-name {
+  font-size: 24px;
+  font-weight: bold;
+  margin-right: 5px;
+}
+.item-type {
+  color: var(--secondary-text);
+  font-size: 18px;
 }
 
 .revision-timeline-wrap {
-  padding-top: 45px;
-  height: 100px;
+  height: 30px;
 }
 
 .revision-viewer-wrap {
@@ -216,7 +243,7 @@ export default {
   padding: 0 5px;
 }
 .action-icon:hover {
-  color: deeppink;
+  color: var(--action);
 }
 
 

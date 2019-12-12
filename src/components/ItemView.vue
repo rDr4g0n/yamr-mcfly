@@ -9,23 +9,35 @@
         v-if="!(diffOnly && !isDiff(field))"
       >
         <div class="field-key">{{ field.name }}</div>
-        <template v-if="isDiff(field)">
-          <div v-if="field.from" class="field-from-value">{{ field.from }}</div>
-          <div v-if="field.value !== null" class="field-to-value">{{ field.value }}</div>
-        </template>
-        <template v-else>
-          <div class="field-value">{{ field.value }}</div>
-        </template>
+        <component
+          :is="componentNameForField(field.name)"
+          :field="field"
+          :itemType="itemType"
+        />
       </div>
      </template>
   </div>
 </template>
 
 <script>
+import DefaultRenderer from "./fieldRenderers/DefaultRenderer"
+import LinkRenderer from "./fieldRenderers/LinkRenderer"
+
 export default {
   name: "item-view",
+  components: {
+    DefaultRenderer,
+    LinkRenderer,
+  },
   props: {
+    itemType: String,
     fields: Array,
+    fieldsMap: {
+      type: Object,
+      default(){
+        return {}
+      }
+    },
     diffOnly: {
       type: Boolean,
       default: false
@@ -34,6 +46,9 @@ export default {
   methods: {
     isDiff(field){
       return "from" in field
+    },
+    componentNameForField(fieldName){
+      return this.fieldsMap[fieldName] || "DefaultRenderer"
     }
   }
 }
@@ -50,24 +65,5 @@ export default {
   font-size: 12px;
   color: var(--secondary-text);
   padding-bottom: 4px;
-}
-.field-value {
-  font-size: 16px;
-}
-.field-to-value {
-  background-color: darkgreen;
-}
-.field-to-value:before {
-  font-family: monospace;
-  color: palegreen;
-  content: "+";
-}
-.field-from-value {
-  background-color: firebrick;
-}
-.field-from-value:before {
-  font-family: monospace;
-  color: lightsalmon;
-  content: "-";
 }
 </style>

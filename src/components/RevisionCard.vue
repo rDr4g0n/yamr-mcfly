@@ -8,7 +8,12 @@
       <div class="revision-card-date">{{ timestamp | toDate }}</div>
       <div class="revision-card-time">{{ timestamp | toTime }}</div>
     </div>
-    <ItemView :fields="formattedFields" :diffOnly="diffOnly"/>
+    <ItemView
+      :itemType="itemType"
+      :fields="formattedFields"
+      :diffOnly="diffOnly"
+      :fieldsMap="{'_zen_impactedEntities': 'LinkRenderer'}"
+    />
   </div>
 </template>
 
@@ -26,6 +31,7 @@ export default {
   props: {
     title: String,
     timestamp: Number,
+    itemType: String,
     fields: Object,
     diffFields: Object,
     diffOnly: {
