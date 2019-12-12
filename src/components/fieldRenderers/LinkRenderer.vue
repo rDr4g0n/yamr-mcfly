@@ -49,18 +49,19 @@ export default {
       return value.map(v => this.valueObject(v))
     },
     valueObject(value){
+      let v = value
       if(typeof value === "string"){
-        return {
+        v = {
           id: value,
           name: value,
-          type: this.itemType,
-          url: `/${this.itemType}/${value}`
         }
       }
       return Object.assign(
-        {},
-        value,
-        { url: `/${this.itemType}/${value}` }
+        {
+          type: this.itemType,
+          url: `/#/${this.itemType}/${v.id}`,
+        },
+        v
       )
     },
     isDiff(field){
@@ -71,26 +72,6 @@ export default {
 </script>
 
 <style scoped>
-.field-value {
-  font-size: 16px;
-}
-.field-to-value {
-  background-color: darkgreen;
-}
-.field-to-value:before {
-  font-family: monospace;
-  color: palegreen;
-  content: "+";
-}
-.field-from-value {
-  background-color: firebrick;
-}
-.field-from-value:before {
-  font-family: monospace;
-  color: lightsalmon;
-  content: "-";
-}
-
 .item-link {
   display: block;
   color: var(--action);

@@ -2,16 +2,17 @@
 
 ## TODO
 
+- timeline
+  - start/end time
+  - revised fields in timeline
 - comparison diff is reversed :(
 - action icons
 - section renderer (metric, event, entity)
 - metric, event view
-- timeline
 - wire to real data
-- date picker
 - get id, type from URL
-- field renderer for ids (links)
 - keyboard nav
+- store/load selected snapshot state in URL
 
 
 ## Project setup

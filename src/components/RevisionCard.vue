@@ -12,7 +12,7 @@
       :itemType="itemType"
       :fields="formattedFields"
       :diffOnly="diffOnly"
-      :fieldsMap="{'_zen_impactedEntities': 'LinkRenderer'}"
+      :fieldsMap="fieldsMap"
     />
   </div>
 </template>
@@ -22,6 +22,13 @@ import ItemView from "./ItemView"
 
 const isEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b)
 const getValue = value => value.length > 1 ? value : value[0]
+
+const fieldsMapByType = (itemType) => ({
+  E: {
+    "_zen_impactedEntities": "Link",
+    "mem_capacity": "FriendlyNumber"
+  }
+}[itemType])
 
 export default {
   name: 'revision-card',
@@ -40,6 +47,9 @@ export default {
     }
   },
   computed: {
+    fieldsMap(){
+      return fieldsMapByType(this.itemType)
+    },
     formattedFields(){
       let fields = Object.entries(this.fields)
         .map(([name, value]) => {

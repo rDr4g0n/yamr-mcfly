@@ -20,14 +20,12 @@
 </template>
 
 <script>
-import DefaultRenderer from "./fieldRenderers/DefaultRenderer"
-import LinkRenderer from "./fieldRenderers/LinkRenderer"
+import renderers from "./fieldRenderers"
 
 export default {
   name: "item-view",
   components: {
-    DefaultRenderer,
-    LinkRenderer,
+    ...renderers
   },
   props: {
     itemType: String,
@@ -48,7 +46,7 @@ export default {
       return "from" in field
     },
     componentNameForField(fieldName){
-      return this.fieldsMap[fieldName] || "DefaultRenderer"
+      return `${(this.fieldsMap[fieldName] || "Default")}Renderer`
     }
   }
 }
@@ -65,5 +63,27 @@ export default {
   font-size: 12px;
   color: var(--secondary-text);
   padding-bottom: 4px;
+}
+</style>
+
+<style>
+.field-renderer .field-value {
+  font-size: 16px;
+}
+.field-renderer .field-to-value {
+  background-color: darkgreen;
+}
+.field-renderer .field-to-value:before {
+  font-family: monospace;
+  color: palegreen;
+  content: "+";
+}
+.field-renderer .field-from-value {
+  background-color: firebrick;
+}
+.field-renderer .field-from-value:before {
+  font-family: monospace;
+  color: lightsalmon;
+  content: "-";
 }
 </style>

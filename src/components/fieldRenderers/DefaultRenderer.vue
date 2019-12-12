@@ -23,25 +23,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.field-value {
-  font-size: 16px;
-}
-.field-to-value {
-  background-color: darkgreen;
-}
-.field-to-value:before {
-  font-family: monospace;
-  color: palegreen;
-  content: "+";
-}
-.field-from-value {
-  background-color: firebrick;
-}
-.field-from-value:before {
-  font-family: monospace;
-  color: lightsalmon;
-  content: "-";
-}
-</style>
