@@ -35,9 +35,7 @@ export default {
   },
   computed: {
     formattedFields(){
-      // TODO - sort
-      // TODO - record deleted field diffs
-      return Object.entries(this.fields)
+      let fields = Object.entries(this.fields)
         .map(([name, value]) => {
           const f = {
             name,
@@ -54,6 +52,22 @@ export default {
           }
           return f
         })
+      // capture removed fields
+      if(this.diffFields){
+        // look for diffFields which do NOT exist in
+        // this.fields
+        Object.entries(this.diffFields)
+          .forEach(([name, value]) => {
+            if(!this.fields[name]){
+              fields.push({
+                name,
+                value: null,
+                from: getValue(value),
+              })
+            }
+          })
+      }
+      return fields.sort((a, b) => a.name - b.name)
     }
   }
 }

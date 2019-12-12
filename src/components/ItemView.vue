@@ -11,7 +11,7 @@
         <div class="field-key">{{ field.name }}</div>
         <template v-if="isDiff(field)">
           <div v-if="field.from" class="field-from-value">{{ field.from }}</div>
-          <div class="field-to-value">{{ field.value }}</div>
+          <div v-if="field.value !== null" class="field-to-value">{{ field.value }}</div>
         </template>
         <template v-else>
           <div class="field-value">{{ field.value }}</div>

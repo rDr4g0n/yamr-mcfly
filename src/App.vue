@@ -41,6 +41,7 @@
       </div>
       <div class="selected-revision">
         <RevisionCard
+          :class="{'is-comparing': diffRevision}"
           v-if="selectedRevision"
           :title="selectedRevisionTitle"
           :timestamp="selectedRevision.timestamp"
@@ -181,6 +182,10 @@ export default {
   width: 100%;
   display: flex;
   align-items: flex-start;
+}
+
+.revision-card.is-comparing .revision-card-header {
+  background-color: black;
 }
 
 .selected-revision {

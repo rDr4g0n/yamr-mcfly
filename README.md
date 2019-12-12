@@ -1,5 +1,18 @@
 # mcfly-primo-yamr-delorean
 
+## TODO
+
+- comparison diff is reversed
+- action icons
+- field renderer for ids (links)
+- section renderer (metric, event, entity)
+- metric, event view
+- timeline
+- wire to real data
+- date picker
+- get id, type from URL
+
+
 ## Project setup
 ```
 yarn install
