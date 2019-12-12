@@ -67,7 +67,7 @@ export default {
             }
           })
       }
-      return fields.sort((a, b) => a.name - b.name)
+      return fields.sort((a, b) => a.name.localeCompare(b.name))
     }
   }
 }
