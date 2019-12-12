@@ -7,12 +7,13 @@
   - revised fields in timeline
 - comparison diff is reversed :(
 - action icons
-- section renderer (metric, event, entity)
-- metric, event view
-- wire to real data
-- get id, type from URL
 - keyboard nav
-- store/load selected snapshot state in URL
+
+- wire to actual service
+  - special fields callout (neighbors, events, metrics)
+  - get id, type from URL
+  - store/load selected snapshot state in URL
+  - verify metric and event view look ok
 
 
 ## Project setup

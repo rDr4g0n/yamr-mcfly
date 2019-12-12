@@ -28,6 +28,7 @@
 
     <div class="revision-viewer-wrap">
       <div class="prev-revision">
+        <div class="revision-mark" @click="selectRevision(prevRevision)">◆</div>
         <RevisionCard
           v-if="prevRevision"
           title="Previous Biff"
@@ -47,6 +48,7 @@
         </div>
       </div>
       <div class="selected-revision">
+        <div class="revision-mark selected">◆</div>
         <RevisionCard
           :class="{'is-comparing': diffRevision}"
           v-if="selectedRevision"
@@ -62,6 +64,7 @@
         </RevisionCard>
       </div>
       <div class="next-revision">
+        <div class="revision-mark" @click="selectRevision(nextRevision)">◆</div>
         <RevisionCard
           v-if="nextRevision"
           class="compact-revision"
@@ -81,6 +84,7 @@
           <div>No newer revisions within this timeframe</div>
         </div>
       </div>
+      <div class="revision-marks-line"></div>
     </div>
   </div>
 
@@ -166,7 +170,7 @@ export default {
   --primary-text: #DDD;
   --secondary-text: #999;
   --base-margin: 10px;
-  --action: deeppink;
+  --action: cyan;
   --action-reverse: white;
 }
 
@@ -210,16 +214,49 @@ export default {
 }
 
 .revision-viewer-wrap {
+  position: relative;
   flex: 1;
   width: 100%;
   display: flex;
   align-items: flex-start;
 }
 
+.revision-marks-line {
+  position: absolute;
+  top: 25px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  border-bottom: solid 2px #555;
+}
+
+.revision-viewer-wrap .revision-mark {
+  position: relative;
+  margin: 10px 0;
+  z-index: 2;
+  font-size: 24px;
+  color: #555;
+  cursor: pointer;
+}
+.revision-viewer-wrap .revision-mark.selected {
+  color: white;
+}
+.revision-viewer-wrap .revision-mark:hover {
+  color: var(--action);
+}
+
 .revision-card.is-comparing .revision-card-header {
   background-color: black;
 }
 
+.selected-revision,
+.prev-revision,
+.next-revision {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 10px 10px 10px;
+}
 .selected-revision {
   flex: 1;
 }
@@ -232,7 +269,8 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 40px 20px;
+  width: 100%;
+  padding: 10px;
   height: 200px;
   color: var(--secondary-text);
   border: solid var(--secondary-text) 1px;

@@ -79,4 +79,8 @@ export default {
 .item-link.reverse {
   color: var(--action-reverse);
 }
+.item-link:hover {
+  display: block;
+  color: var(--action-reverse);
+}
 </style>

@@ -93,8 +93,8 @@ export default {
 <style scoped>
 .revision-card {
   background-color: #222;
-  margin: 20px 10px;
   box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.5);
+  width: 100%;
 }
 .revision-card.diff {
   background-color: #333;

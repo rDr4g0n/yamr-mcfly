@@ -79,8 +79,12 @@ export default {
 }
 .revision-mark {
   fill: #555;
+  cursor: pointer;
 }
 .revision-mark.selected {
   fill: white;
+}
+.revision-mark:hover {
+  fill: var(--action);
 }
 </style>
