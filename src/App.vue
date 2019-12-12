@@ -19,6 +19,7 @@
       </div>
 
       <div class="revision-timeline-wrap">
+        <div class="revision-timeline-title">Revisions ({{ revisions.length }})</div>
         <RevisionTimeline
           :revisions="revisions"
           :start="start"
@@ -115,7 +116,7 @@ export default {
       itemName: null,
       start: null,
       end: null,
-      revisions: null,
+      revisions: [],
       prevRevision: null,
       selectedRevision: null,
       nextRevision: null,
@@ -306,7 +307,13 @@ html, body, #app {
 }
 
 .revision-timeline-wrap {
-  height: 30px;
+  display: flex;
+  flex-direction: column;
+  height: 70px;
+}
+
+.revision-timeline {
+  flex: 1;
 }
 
 .revision-viewer-wrap {

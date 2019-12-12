@@ -1,7 +1,7 @@
 <template>
   <div class="revision-timeline">
-    <svg class="revision-timeline-svg">
-      <g ref="revision-marks">
+    <svg class="revision-timeline-svg" ref="svg">
+      <g>
         <rect
           class="revision-mark"
           v-for="(revision, i) in revisions"
@@ -24,7 +24,23 @@
           @click="onRevisionMarkSelect(selectedRevision)"
         />
       </g>
+      <g ref="tick-marks">
+        <line
+          class="tick-mark"
+          v-for="tick in ticks"
+          :key="tick"
+          :x1="xScale(tick)"
+          :x2="xScale(tick)"
+          y1="35"
+          y2="40"
+          stroke="#CCC"
+        />
+      </g>
     </svg>
+    <div class="start-end-labels">
+      <div class="start-label">{{ start | toDate }}</div>
+      <div class="end-label">{{ end | toDate }}</div>
+    </div>
   </div>
 </template>
 
@@ -35,7 +51,7 @@ import { scaleLinear } from "d3-scale"
   - find all fields which ever have changes and draw a line for each
 */
 
-const PADDING = 15
+const PADDING = 20
 
 export default {
   props: {
@@ -54,7 +70,10 @@ export default {
     xScale(){
       return scaleLinear()
         .domain([this.start, this.end])
-        .range([PADDING, this.w - PADDING])
+        .range([PADDING, this.w - (PADDING / 2)])
+    },
+    ticks(){
+      return [this.start, this.end]
     },
   },
   methods: {
@@ -66,6 +85,8 @@ export default {
     const bb = this.$el.getBoundingClientRect()
     this.w = bb.width
     this.h = bb.height
+    this.$refs.svg.style.width = `${this.w}px`
+    this.$refs.svg.style.height = `${this.h}px`
   }
 }
 
@@ -74,7 +95,7 @@ export default {
 <style scoped>
 .revision-timeline-svg {
   width: 100%;
-  height: 100%;
+  height: 0;
 }
 .revision-mark {
   fill: #555;
@@ -85,5 +106,19 @@ export default {
 }
 .revision-mark:hover {
   fill: var(--action);
+}
+.start-end-labels {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  color: var(--secondary-text);
+}
+.start-label {
+  text-align: left;
+  font-size: 14px;
+}
+.end-label {
+  text-align: right;
+  font-size: 14px;
 }
 </style>
