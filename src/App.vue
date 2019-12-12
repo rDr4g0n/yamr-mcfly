@@ -9,13 +9,15 @@
           <div class="item-name">{{ itemName }}</div>
           <div class="item-type">{{ labelForType(itemType) }}</div>
         </div>
-        <!--
         <div class="time-range">
-          <input class="time-range-start" v-model="start">
-          <span>to</span>
-          <input class="time-range-start" v-model="end">
+          <select class="time-range-duration" v-model="duration">
+            <option :value="1000 * 60 * 60 * 24">Last 24 Hours</option>
+            <option :value="1000 * 60 * 60 * 24 * 7">Last 7 Days</option>
+            <option :value="1000 * 60 * 60 * 24 * 30">Last 30 Days</option>
+            <option :value="1000 * 60 * 60 * 24 * 60">Last 60 Days</option>
+            <option :value="1000 * 60 * 60 * 24 * 90">Last 90 Days</option>
+          </select>
         </div>
-        -->
       </div>
 
       <div class="revision-timeline-wrap">
@@ -123,6 +125,7 @@ export default {
       diffRevision: null,
       diffRevisionTitle: null,
       loading: false,
+      duration: 1000 * 60 * 60 * 24,
     }
   },
   computed: {
@@ -135,6 +138,11 @@ export default {
   },
   methods: {
     selectRevision(revision){
+      if(!revision){
+        this.selectedRevision = null
+        this.prevRevision = null
+        this.nextRevision = null
+      }
       const i = this.revisions.indexOf(revision)
       this.selectedRevision = this.revisions[i]
       this.prevRevision = i ? this.revisions[i-1] : null
@@ -159,24 +167,27 @@ export default {
         return
       }
       this.loading = true
+      this.end = Date.now()
+      this.start = Date.now() - this.duration
       console.log("fetching revisions", this.itemType, this.itemId)
-      const url = `http://10.87.111.197:8089/${this.itemType}/${this.itemId}`
+      const url = `http://10.87.111.197:8089/${this.itemType}/${this.itemId}?start=${this.start}`
       const resp = await fetch(url)
       const data = await resp.json()
       data.sort((a, b) => a.timestamp - b.timestamp)
+      this.loading = false
 
-      // TODO - handle err, empty results, etc
-      this.revisions = data
+      this.revisions = data || []
+
+      if(!this.revisions.length){
+        this.selectRevision()
+        this.itemName = this.itemId
+        return
+      }
+
       // TODO - check number of revisions
       this.selectRevision(this.revisions[this.revisions.length-1])
-
-      // TODO - be much safer here
-      const { fields, timestamp } = this.selectedRevision
+      const { fields } = this.selectedRevision
       this.itemName = fields.name ? fields.name[0] : "[ Unnamed ]"
-      this.end = timestamp
-      this.start = this.revisions[0].timestamp
-
-      this.loading = false
     },
     evaluateHash(){
       const parts = window.location.hash.split("/")
@@ -202,6 +213,12 @@ export default {
   },
   watch: {
     itemId: {
+      immediate: true,
+      handler(){
+        this.fetchRevisions()
+      }
+    },
+    duration: {
       immediate: true,
       handler(){
         this.fetchRevisions()

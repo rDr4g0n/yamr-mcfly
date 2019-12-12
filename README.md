@@ -2,16 +2,19 @@
 
 ## TODO
 
-- timeline
-  - start/end time
-  - revised fields in timeline *
 - comparison diff is reversed :(
-- nicely diff array values *
-- speedometer or flux capacitor
+- events renderer
+- ! event Link fields dont have type set
 - special fields callout (neighbors, events, metrics)
+  - or at least make them collapsible, scrollable, something
+  - or move them down below details
+- speedometer or flux capacitor animation
+- look at `exists` and do stuff
+- blacklist fields from generating diffs
+- revised fields in timeline *
+- nicely diff array values *
 - store/load selected snapshot state in URL *
-- bugs
-  - if a field is present but has no value the label is rendered, but no value
+- if a field is present but has no value the label is rendered, but no value
 
 
 ## Project setup

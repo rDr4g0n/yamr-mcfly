@@ -31,10 +31,17 @@ const fieldsMapByType = (itemType) => ({
     "memory": "FriendlyNumber",
     "cpuMhz": "FriendlyNumber",
     "totalMemory": "FriendlyNumber",
+    "_events_": "Event"
   },
   M: {
-    // TODO - configurable type
-    "_zen_direct_entity_id": "Link"
+    "_zen_direct_entity_id": "Link",
+  },
+  V: {
+    "_zen_entityIds": "Link",
+    "_zen_parentEntityIds": "Link",
+    "firstSeen": "DateTime",
+    "lastSeen": "DateTime",
+    "updateTime": "DateTime",
   }
 }[itemType])
 
