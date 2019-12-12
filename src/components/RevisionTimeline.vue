@@ -1,6 +1,14 @@
 <template>
   <div class="revision-timeline">
     <svg class="revision-timeline-svg" ref="svg">
+      <line
+        class="x-axis"
+        :x1="0"
+        :x2="w"
+        y1="17"
+        y2="17"
+        stroke="#888"
+      />
       <g>
         <rect
           class="revision-mark"
@@ -85,8 +93,6 @@ export default {
     const bb = this.$el.getBoundingClientRect()
     this.w = bb.width
     this.h = bb.height
-    this.$refs.svg.style.width = `${this.w}px`
-    this.$refs.svg.style.height = `${this.h}px`
   }
 }
 
@@ -95,7 +101,7 @@ export default {
 <style scoped>
 .revision-timeline-svg {
   width: 100%;
-  height: 0;
+  height: 40px;
 }
 .revision-mark {
   fill: #555;
