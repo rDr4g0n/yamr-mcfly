@@ -117,7 +117,8 @@ export default {
       this.selectedRevision = this.revisions[i]
       this.prevRevision = i ? this.revisions[i-1] : null
       this.nextRevision = i < this.revisions.length ? this.revisions[i+1] : null
-      this.diffRevision = null
+      // reset any comparison junk
+      this.compareRevision()
     },
     compareRevision(revision, title){
       this.diffRevision = revision

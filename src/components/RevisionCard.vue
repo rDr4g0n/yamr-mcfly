@@ -16,6 +16,7 @@
 import ItemView from "./ItemView"
 
 const isEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b)
+const getValue = value => value.length > 1 ? value : value[0]
 
 export default {
   name: 'revision-card',
@@ -34,18 +35,18 @@ export default {
   },
   computed: {
     formattedFields(){
+      // TODO - sort
+      // TODO - record deleted field diffs
       return Object.entries(this.fields)
         .map(([name, value]) => {
           const f = {
             name,
-            // TODO - some vals might be more than just an array
-            value: value.length > 1 ? value : value[0],
+            value: getValue(value)
           }
           if(this.diffFields){
             let from = this.diffFields[name]
             if(from) {
-              // TODO - some vals might be more than just an array
-              from = from.length > 1 ? from : from[0]
+              from = getValue(from)
             }
             if(!isEqual(from, f.value)){
               f.from = from
