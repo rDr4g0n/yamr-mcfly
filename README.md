@@ -7,11 +7,9 @@
   - revised fields in timeline *
 - comparison diff is reversed :(
 - nicely diff array values *
-
-- wire to actual service
-  - special fields callout (neighbors, events, metrics)
-  - store/load selected snapshot state in URL *
-
+- speedometer or flux capacitor
+- special fields callout (neighbors, events, metrics)
+- store/load selected snapshot state in URL *
 - bugs
   - if a field is present but has no value the label is rendered, but no value
 

@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <div class="loader" v-if="loading"></div>
+    <div class="loader" v-if="loading">
+      <div class="loading-spinner">❤</div>
+    </div>
     <div style="background-color: #111;">
       <div class="item-header-wrap">
         <div class="item-header">
@@ -247,6 +249,33 @@ html, body, #app {
   left: 0;
   background-color: rgba(0,0,0,0.8);
   z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-spinner {
+  color: var(--action);
+  font-size: 200px;
+  animation-duration: 0.5s;
+  animation-name: loader;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes loader {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .revision-timeline-wrap,
