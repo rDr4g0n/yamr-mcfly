@@ -19,14 +19,56 @@
     </div>
 
     <div class="revision-viewer-wrap">
-      <RevisionCard
-          v-for="(revision, i) in revisions"
-          :key="i"
-          :title="`Revision ${i}`"
-          :timestamp="revision.timestamp"
-          :fields="revision.fields"
-          :diffFields="i ? revisions[i-1].fields : null"
-      />
+      <div class="prev-revision">
+        <RevisionCard
+          v-if="prevRevision"
+          title="Previous Revision"
+          :timestamp="prevRevision.timestamp"
+          :fields="prevRevision.fields"
+          :diffFields="selectedRevision.fields"
+          :diffOnly="true"
+        >
+          <template v-slot:actions>
+            <div class="action-icon" @click="compareRevision(prevRevision, 'Previous')">#</div>
+            <div class="action-icon" @click="selectRevision(prevRevision)">o</div>
+          </template>
+        </RevisionCard>
+        <div class="no-revision-message" v-else>
+          <div>No older revisions within this timeframe</div>
+        </div>
+      </div>
+      <div class="selected-revision">
+        <RevisionCard
+          v-if="selectedRevision"
+          :title="selectedRevisionTitle"
+          :timestamp="selectedRevision.timestamp"
+          :fields="selectedRevision.fields"
+          :diffFields="diffRevision ? diffRevision.fields : null"
+        >
+          <template v-slot:actions v-if="diffRevision">
+            <div class="action-icon" @click="compareRevision()">X</div>
+          </template>
+        </RevisionCard>
+      </div>
+      <div class="next-revision">
+        <RevisionCard
+          v-if="nextRevision"
+          class="compact-revision"
+          title="Next Revision"
+          :timestamp="nextRevision.timestamp"
+          :fields="nextRevision.fields"
+          :diffFields="selectedRevision.fields"
+          :diffOnly="true"
+        >
+          <template v-slot:actions>
+            <div class="action-icon" @click="compareRevision(nextRevision, 'Next')">#</div>
+            <div class="action-icon" @click="selectRevision(nextRevision)">o</div>
+          </template>
+        </RevisionCard>
+        <div class="no-revision-message" v-else>
+          <div>No newer revisions within this timeframe</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -54,7 +96,36 @@ export default {
       start: null,
       end: null,
       revisions: data,
+      prevRevision: null,
+      selectedRevision: null,
+      nextRevision: null,
+      diffRevision: null,
+      diffRevisionTitle: null,
     }
+  },
+  computed: {
+    selectedRevisionTitle(){
+      if(this.diffRevisionTitle){
+        return `Comparing Selected and ${this.diffRevisionTitle} Revision`
+      }
+      return "Selected Revision"
+    }
+  },
+  methods: {
+    selectRevision(revision){
+      const i = this.revisions.indexOf(revision)
+      this.selectedRevision = this.revisions[i]
+      this.prevRevision = i ? this.revisions[i-1] : null
+      this.nextRevision = i < this.revisions.length ? this.revisions[i+1] : null
+      this.diffRevision = null
+    },
+    compareRevision(revision, title){
+      this.diffRevision = revision
+      this.diffRevisionTitle = title
+    }
+  },
+  mounted(){
+    this.selectRevision(this.revisions[this.revisions.length-1])
   }
 }
 </script>
@@ -113,8 +184,31 @@ html, body, #app {
   overflow-x: auto;
 }
 
-.revision-card {
-  flex: 1 0 500px;
+.selected-revision {
+  flex: 1;
 }
+.prev-revision,
+.next-revision {
+  flex: 0 0 400px;
+}
+
+.no-revision-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 40px 20px;
+  height: 200px;
+  color: var(--secondary-text);
+  border: solid var(--secondary-text) 1px;
+}
+
+.action-icon {
+  cursor: pointer;
+  padding: 0 5px;
+}
+.action-icon:hover {
+  color: deeppink;
+}
+
 
 </style>

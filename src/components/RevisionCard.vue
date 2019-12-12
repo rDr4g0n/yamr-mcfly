@@ -2,12 +2,13 @@
   <div class="revision-card">
     <div class="revision-card-header">
       <div class="revision-card-title">{{ title }}</div>
+      <div class="revision-card-actions"><slot name="actions"></slot></div>
     </div>
     <div class="revision-card-datetime">
       <div class="revision-card-date">{{ timestamp | toDate }}</div>
       <div class="revision-card-time">{{ timestamp | toTime }}</div>
     </div>
-    <ItemView :fields="formattedFields" :diffOnly="true"/>
+    <ItemView :fields="formattedFields" :diffOnly="diffOnly"/>
   </div>
 </template>
 
@@ -26,6 +27,10 @@ export default {
     timestamp: Number,
     fields: Object,
     diffFields: Object,
+    diffOnly: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     formattedFields(){
@@ -62,11 +67,14 @@ export default {
 
 .revision-card-header {
   display: flex;
-  align-items: space-between;
+  justify-content: space-between;
   padding: calc(var(--base-margin) * 1.5);
 }
 .revision-card-title {
   color: var(--secondary-text);
+}
+.revision-card-actions {
+    display: flex;
 }
 .revision-card-datetime {
   padding: calc(var(--base-margin) * 1.5);
