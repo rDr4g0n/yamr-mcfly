@@ -30,7 +30,7 @@
       <div class="prev-revision">
         <RevisionCard
           v-if="prevRevision"
-          title="Previous Revision"
+          title="Previous Biff"
           :timestamp="prevRevision.timestamp"
           :itemType="itemType"
           :fields="prevRevision.fields"
@@ -65,7 +65,7 @@
         <RevisionCard
           v-if="nextRevision"
           class="compact-revision"
-          title="Next Revision"
+          title="Next Biff"
           :timestamp="nextRevision.timestamp"
           :itemType="itemType"
           :fields="nextRevision.fields"

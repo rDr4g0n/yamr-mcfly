@@ -1,5 +1,5 @@
 <template>
-  <div class="revision-card">
+  <div class="revision-card" :class="{ diff: diffOnly }">
     <div class="revision-card-header">
       <div class="revision-card-title">{{ title }}</div>
       <div class="revision-card-actions"><slot name="actions"></slot></div>
@@ -25,7 +25,7 @@ const getValue = value => value.length > 1 ? value : value[0]
 
 const fieldsMapByType = (itemType) => ({
   E: {
-    "_zen_impactedEntities": "Link",
+    "_parents_": "Link",
     "mem_capacity": "FriendlyNumber"
   }
 }[itemType])
@@ -95,6 +95,10 @@ export default {
   background-color: #222;
   margin: 20px 10px;
   box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.5);
+}
+.revision-card.diff {
+  background-color: #333;
+  box-shadow: none;
 }
 
 .revision-card-header {
