@@ -1,20 +1,22 @@
 <template>
   <div id="app">
-    <div class="item-header-wrap" v-if="false">
-      <div class="item-header">
-        <div class="item-name">{{ itemName }}</div>
-        <div class="item-type">{{ itemType }}</div>
+    <div style="background-color: #111;" v-if="false">
+      <div class="item-header-wrap">
+        <div class="item-header">
+          <div class="item-name">{{ itemName }}</div>
+          <div class="item-type">{{ itemType }}</div>
+        </div>
+        <div class="time-range">
+          <input class="time-range-start" v-model="start">
+          <span>to</span>
+          <input class="time-range-start" v-model="end">
+        </div>
       </div>
-      <div class="time-range">
-        <input class="time-range-start" v-model="start">
-        <span>to</span>
-        <input class="time-range-start" v-model="end">
-      </div>
-    </div>
 
-    <div class="revision-timeline-wrap" v-if="false">
-      <div class="revision-timeline">
-        {{ revisions.length }} Revisions
+      <div class="revision-timeline-wrap">
+        <div class="revision-timeline">
+          {{ revisions.length }} Revisions
+        </div>
       </div>
     </div>
 
@@ -141,19 +143,17 @@ export default {
 }
 
 :root {
-  --secondary-text: #777;
+  --primary-text: #DDD;
+  --secondary-text: #999;
   --base-margin: 10px;
 }
 
-html, body, #app {
-  height: 100%;
-  overflow-x: hidden;
-}
-
 #app {
+  color: var(--primary-text);
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  background-color: #444;
 }
 
 .revision-timeline-wrap,
@@ -178,11 +178,9 @@ html, body, #app {
 
 .revision-viewer-wrap {
   flex: 1;
-  background-color: #CCC;
   width: 100%;
   display: flex;
   align-items: flex-start;
-  overflow-x: auto;
 }
 
 .selected-revision {

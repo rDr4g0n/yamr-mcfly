@@ -49,24 +49,25 @@ export default {
 .field-key {
   font-size: 12px;
   color: var(--secondary-text);
+  padding-bottom: 4px;
 }
 .field-value {
   font-size: 16px;
 }
 .field-to-value {
-    background-color: palegreen;
+  background-color: darkgreen;
 }
 .field-to-value:before {
-    font-family: monospace;
-    color: darkgreen;
-    content: "+";
+  font-family: monospace;
+  color: palegreen;
+  content: "+";
 }
 .field-from-value {
-    background-color: lightsalmon;
+  background-color: firebrick;
 }
 .field-from-value:before {
-    font-family: monospace;
-    color: darkred;
-    content: "-";
+  font-family: monospace;
+  color: lightsalmon;
+  content: "-";
 }
 </style>

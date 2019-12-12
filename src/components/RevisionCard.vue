@@ -62,8 +62,9 @@ export default {
 
 <style scoped>
 .revision-card {
-  background-color: white;
-  margin: 40px 20px;
+  background-color: #222;
+  margin: 20px 10px;
+  box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.5);
 }
 
 .revision-card-header {
