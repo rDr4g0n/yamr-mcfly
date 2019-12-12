@@ -264,6 +264,11 @@ export default {
 .next-revision {
   flex: 0 0 400px;
 }
+.prev-revision .revision-card-date,
+.next-revision .revision-card-date {
+  font-size: 18px;
+  font-weight: normal;
+}
 
 .no-revision-message {
   display: flex;

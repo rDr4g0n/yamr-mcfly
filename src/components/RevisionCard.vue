@@ -108,18 +108,23 @@ export default {
 }
 .revision-card-title {
   color: var(--secondary-text);
+  font-style: italic;
 }
 .revision-card-actions {
     display: flex;
 }
 .revision-card-datetime {
-  padding: calc(var(--base-margin) * 1.5);
+  display: flex;
+  align-items: baseline;
+  padding: var(--base-margin) calc(var(--base-margin) * 1.5);
 }
 .revision-card-date {
   font-size: 24px;
+  font-weight: bold;
+  margin-right: 5px;
 }
 .revision-card-time {
+  color: var(--secondary-text);
   font-size: 18px;
-  font-weight: bold;
 }
 </style>
