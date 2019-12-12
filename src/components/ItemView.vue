@@ -58,6 +58,7 @@ export default {
 }
 .field {
   margin-bottom: calc(var(--base-margin) * 1.5);
+  overflow-wrap: break-word;
 }
 .field-key {
   font-size: 12px;

@@ -26,6 +26,7 @@ const getValue = value => value.length > 1 ? value : value[0]
 const fieldsMapByType = (itemType) => ({
   E: {
     "_parents_": "Link",
+    "_children_": "Link",
     "mem_capacity": "FriendlyNumber"
   }
 }[itemType])

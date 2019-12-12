@@ -93,12 +93,11 @@
 <script>
 import Vue from "vue"
 import moment from "moment"
-import { data } from "./data"
 import RevisionCard from "./components/RevisionCard"
 import RevisionTimeline from "./components/RevisionTimeline"
 
 Vue.filter("toDate", val => moment(val).format("MMMM Do, YYYY"))
-Vue.filter("toTime", val => moment(val).format("h:mm a"))
+Vue.filter("toTime", val => moment(val).format("h:mm:ss a"))
 
 export default {
   name: 'app',
@@ -107,13 +106,12 @@ export default {
     RevisionTimeline,
   },
   data(){
-    data.sort((a, b) => a.timestamp - b.timestamp)
     return {
-      itemType: "E",
-      itemId: "1234",
-      itemName: "testrail.zenoss.loc",
-      start: data[0].timestamp,
-      end: data[data.length-1].timestamp,
+      itemType: null,
+      itemId: null,
+      itemName: null,
+      start: null,
+      end: null,
       revisions: null,
       prevRevision: null,
       selectedRevision: null,
@@ -156,22 +154,21 @@ export default {
         return
       }
       console.log("fetching revisions", this.itemType, this.itemId)
-      /*
-      const url = `http://10.87.111.197:8089?id=${this.itemId}&type=${this.itemType}`
+      const url = `http://10.87.111.197:8089/${this.itemType}/${this.itemId}`
       const resp = await fetch(url)
       const data = await resp.json()
-      console.log("got data", data)
-      */
-      const revisions = await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(data)
-        }, 2000)
-      })
+      data.sort((a, b) => a.timestamp - b.timestamp)
 
-      // TODO - handle err
-      this.revisions = revisions
+      // TODO - handle err, empty results, etc
+      this.revisions = data
       // TODO - check number of revisions
       this.selectRevision(this.revisions[this.revisions.length-1])
+
+      // TODO - be much safer here
+      const { fields, timestamp } = this.selectedRevision
+      this.itemName = fields.name ? fields.name[0] : "[ Unnamed ]"
+      this.end = timestamp
+      this.start = this.revisions[0].timestamp
     },
     evaluateHash(){
       const parts = window.location.hash.split("/")
@@ -180,6 +177,7 @@ export default {
     },
   },
   created(){
+    this.evaluateHash()
     window.addEventListener("hashchange", (newUrl, oldUrl) => {
       if(newUrl !== oldUrl){
         this.evaluateHash()
@@ -222,12 +220,18 @@ export default {
   --action-reverse: white;
 }
 
+html, body, #app {
+  min-height: 100vh;
+}
+
 #app {
   color: var(--primary-text);
   display: flex;
   flex-direction: column;
   align-items: stretch;
   background-color: #444;
+  width: 100%;
+  overflow: hidden;
 }
 
 .revision-timeline-wrap,
@@ -307,10 +311,12 @@ export default {
 }
 .selected-revision {
   flex: 1;
+  overflow: hidden;
 }
 .prev-revision,
 .next-revision {
-  flex: 0 0 400px;
+  flex: 0 1 400px;
+  max-width: 400px;
 }
 .prev-revision .revision-card-date,
 .next-revision .revision-card-date {
