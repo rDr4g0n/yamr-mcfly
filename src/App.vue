@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="item-header-wrap">
+    <div class="item-header-wrap" v-if="false">
       <div class="item-header">
         <div class="item-name">{{ itemName }}</div>
         <div class="item-type">{{ itemType }}</div>
@@ -12,7 +12,7 @@
       </div>
     </div>
 
-    <div class="revision-timeline-wrap">
+    <div class="revision-timeline-wrap" v-if="false">
       <div class="revision-timeline">
         {{ revisions.length }} Revisions
       </div>
@@ -25,6 +25,7 @@
           :title="`Revision ${i}`"
           :timestamp="revision.timestamp"
           :fields="revision.fields"
+          :diffFields="i ? revisions[i-1].fields : null"
       />
     </div>
   </div>
@@ -110,6 +111,10 @@ html, body, #app {
   display: flex;
   align-items: flex-start;
   overflow-x: auto;
+}
+
+.revision-card {
+  flex: 1 0 500px;
 }
 
 </style>

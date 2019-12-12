@@ -7,12 +7,14 @@
       <div class="revision-card-date">{{ timestamp | toDate }}</div>
       <div class="revision-card-time">{{ timestamp | toTime }}</div>
     </div>
-    <ItemView :item="fields" />
+    <ItemView :fields="formattedFields" :diffOnly="true"/>
   </div>
 </template>
 
 <script>
 import ItemView from "./ItemView"
+
+const isEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b)
 
 export default {
   name: 'revision-card',
@@ -23,6 +25,30 @@ export default {
     title: String,
     timestamp: Number,
     fields: Object,
+    diffFields: Object,
+  },
+  computed: {
+    formattedFields(){
+      return Object.entries(this.fields)
+        .map(([name, value]) => {
+          const f = {
+            name,
+            // TODO - some vals might be more than just an array
+            value: value.length > 1 ? value : value[0],
+          }
+          if(this.diffFields){
+            let from = this.diffFields[name]
+            if(from) {
+              // TODO - some vals might be more than just an array
+              from = from.length > 1 ? from : from[0]
+            }
+            if(!isEqual(from, f.value)){
+              f.from = from
+            }
+          }
+          return f
+        })
+    }
   }
 }
 

@@ -1,13 +1,23 @@
 <template>
   <div class="item-view">
-    <div
-      class="field"
-      v-for="(value, key) in item"
-      :key="key"
+    <template
+      v-for="field in fields"
     >
-      <div class="field-key">{{ key }}</div>
-      <div class="field-value">{{ value[0] }}</div>
-    </div>
+      <div
+        class="field"
+        :key="field.name"
+        v-if="!(diffOnly && !isDiff(field))"
+      >
+        <div class="field-key">{{ field.name }}</div>
+        <template v-if="isDiff(field)">
+          <div v-if="field.from" class="field-from-value">{{ field.from }}</div>
+          <div class="field-to-value">{{ field.value }}</div>
+        </template>
+        <template v-else>
+          <div class="field-value">{{ field.value }}</div>
+        </template>
+      </div>
+     </template>
   </div>
 </template>
 
@@ -15,8 +25,17 @@
 export default {
   name: "item-view",
   props: {
-    item: Object
+    fields: Array,
+    diffOnly: {
+      type: Boolean,
+      default: false
+    }
   },
+  methods: {
+    isDiff(field){
+      return "from" in field
+    }
+  }
 }
 </script>
 
@@ -33,5 +52,21 @@ export default {
 }
 .field-value {
   font-size: 16px;
+}
+.field-to-value {
+    background-color: palegreen;
+}
+.field-to-value:before {
+    font-family: monospace;
+    color: darkgreen;
+    content: "+";
+}
+.field-from-value {
+    background-color: lightsalmon;
+}
+.field-from-value:before {
+    font-family: monospace;
+    color: darkred;
+    content: "-";
 }
 </style>
