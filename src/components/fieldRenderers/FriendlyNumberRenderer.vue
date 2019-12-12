@@ -24,7 +24,7 @@ export default {
   },
   filters: {
     toFriendlyNumber(val){
-      return format(".6s")(val)
+      return format(".4s")(val)
     }
   }
 }

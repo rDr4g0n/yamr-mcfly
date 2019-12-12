@@ -12,7 +12,6 @@
         <component
           :is="componentNameForField(field.name)"
           :field="field"
-          :itemType="itemType"
         />
       </div>
      </template>
@@ -28,7 +27,6 @@ export default {
     ...renderers
   },
   props: {
-    itemType: String,
     fields: Array,
     fieldsMap: {
       type: Object,

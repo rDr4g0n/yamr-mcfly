@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <div class="loader" v-if="loading"></div>
     <div style="background-color: #111;">
       <div class="item-header-wrap">
         <div class="item-header">
@@ -39,8 +40,8 @@
           :diffOnly="true"
         >
           <template v-slot:actions>
-            <div class="action-icon" @click="compareRevision(prevRevision, 'Previous')">#</div>
-            <div class="action-icon" @click="selectRevision(prevRevision)">o</div>
+            <div class="action-icon" @click="compareRevision(prevRevision, 'Previous')">±</div>
+            <div class="action-icon" @click="selectRevision(prevRevision)">✓</div>
           </template>
         </RevisionCard>
         <div class="no-revision-message" v-else>
@@ -59,7 +60,7 @@
           :diffFields="diffRevision ? diffRevision.fields : null"
         >
           <template v-slot:actions v-if="diffRevision">
-            <div class="action-icon" @click="compareRevision()">X</div>
+            <div class="action-icon" @click="compareRevision()">⨯</div>
           </template>
         </RevisionCard>
       </div>
@@ -76,8 +77,8 @@
           :diffOnly="true"
         >
           <template v-slot:actions>
-            <div class="action-icon" @click="compareRevision(nextRevision, 'Next')">#</div>
-            <div class="action-icon" @click="selectRevision(nextRevision)">o</div>
+            <div class="action-icon" @click="compareRevision(nextRevision, 'Next')">±</div>
+            <div class="action-icon" @click="selectRevision(nextRevision)">✓</div>
           </template>
         </RevisionCard>
         <div class="no-revision-message" v-else>
@@ -118,6 +119,7 @@ export default {
       nextRevision: null,
       diffRevision: null,
       diffRevisionTitle: null,
+      loading: false,
     }
   },
   computed: {
@@ -153,6 +155,7 @@ export default {
         console.warn("didnt try to fetch", this.itemType, this.itemId)
         return
       }
+      this.loading = true
       console.log("fetching revisions", this.itemType, this.itemId)
       const url = `http://10.87.111.197:8089/${this.itemType}/${this.itemId}`
       const resp = await fetch(url)
@@ -169,6 +172,8 @@ export default {
       this.itemName = fields.name ? fields.name[0] : "[ Unnamed ]"
       this.end = timestamp
       this.start = this.revisions[0].timestamp
+
+      this.loading = false
     },
     evaluateHash(){
       const parts = window.location.hash.split("/")
@@ -232,6 +237,16 @@ html, body, #app {
   background-color: #444;
   width: 100%;
   overflow: hidden;
+}
+
+.loader {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0,0,0,0.8);
+  z-index: 10;
 }
 
 .revision-timeline-wrap,
@@ -337,7 +352,12 @@ html, body, #app {
 
 .action-icon {
   cursor: pointer;
-  padding: 0 5px;
+  padding: 5px;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
 }
 .action-icon:hover {
   color: var(--action);

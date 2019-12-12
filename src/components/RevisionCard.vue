@@ -9,7 +9,6 @@
       <div class="revision-card-time">{{ timestamp | toTime }}</div>
     </div>
     <ItemView
-      :itemType="itemType"
       :fields="formattedFields"
       :diffOnly="diffOnly"
       :fieldsMap="fieldsMap"
@@ -27,7 +26,15 @@ const fieldsMapByType = (itemType) => ({
   E: {
     "_parents_": "Link",
     "_children_": "Link",
-    "mem_capacity": "FriendlyNumber"
+    "mem_capacity": "FriendlyNumber",
+    "_metrics_": "Link",
+    "memory": "FriendlyNumber",
+    "cpuMhz": "FriendlyNumber",
+    "totalMemory": "FriendlyNumber",
+  },
+  M: {
+    // TODO - configurable type
+    "_zen_direct_entity_id": "Link"
   }
 }[itemType])
 
@@ -105,7 +112,9 @@ export default {
 .revision-card-header {
   display: flex;
   justify-content: space-between;
-  padding: calc(var(--base-margin) * 1.5);
+  align-items: center;
+  padding: var(--base-margin) calc(var(--base-margin) * 1.5);
+  height: 45px;
 }
 .revision-card-title {
   color: var(--secondary-text);

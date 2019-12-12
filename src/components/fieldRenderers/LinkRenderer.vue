@@ -36,10 +36,6 @@ export default {
   name: "link-renderer",
   props: {
     field: Object,
-    itemType: {
-      type: String,
-      required: true
-    },
   },
   computed: {
     hasValue(){
@@ -54,20 +50,18 @@ export default {
       return value.map(v => this.valueObject(v))
     },
     valueObject(value){
-      let v = value
       if(typeof value === "string"){
-        v = {
+        return {
           id: value,
           name: value,
+          url: "#"
         }
       }
-      return Object.assign(
-        {
-          type: this.itemType,
-          url: `/#/${this.itemType}/${v.id}`,
-        },
-        v
-      )
+      return {
+        id: value.id,
+        name: value.name,
+        url: `/#/${value.type || "E"}/${value.id}`
+      }
     },
     isDiff(field){
       return "from" in field
@@ -78,14 +72,19 @@ export default {
 
 <style scoped>
 .item-link {
-  display: block;
   color: var(--action);
+}
+.field-from-value,
+.field-to-value,
+.field-value {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 .item-link.reverse {
   color: var(--action-reverse);
 }
 .item-link:hover {
-  display: block;
   color: var(--action-reverse);
 }
 </style>

@@ -6,11 +6,10 @@
   - start/end time
   - revised fields in timeline *
 - comparison diff is reversed :(
-- action icons
+- nicely diff array values *
 
 - wire to actual service
   - special fields callout (neighbors, events, metrics)
-  - verify metric and event view look ok
   - store/load selected snapshot state in URL *
 
 - bugs
