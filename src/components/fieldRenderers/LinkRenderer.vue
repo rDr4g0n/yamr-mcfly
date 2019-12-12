@@ -9,7 +9,7 @@
           :href="value.url"
         >{{ value.name }}</a>
       </div>
-      <div v-if="field.value !== null" class="field-to-value">
+      <div v-if="hasValue" class="field-to-value">
         <a
           class="item-link reverse"
           v-for="(value, i) in valueAsArray(field.value)"
@@ -19,7 +19,7 @@
       </div>
     </template>
     <template v-else>
-      <div class="field-value">
+      <div v-if="hasValue" class="field-value">
         <a
           class="item-link"
           v-for="(value, i) in valueAsArray(field.value)"
@@ -40,6 +40,11 @@ export default {
       type: String,
       required: true
     },
+  },
+  computed: {
+    hasValue(){
+      return this.field.value !== undefined && this.field.value !== null
+    }
   },
   methods: {
     valueAsArray(value){

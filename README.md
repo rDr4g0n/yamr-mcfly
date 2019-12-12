@@ -4,16 +4,17 @@
 
 - timeline
   - start/end time
-  - revised fields in timeline
+  - revised fields in timeline *
 - comparison diff is reversed :(
 - action icons
-- keyboard nav
 
 - wire to actual service
   - special fields callout (neighbors, events, metrics)
-  - get id, type from URL
-  - store/load selected snapshot state in URL
   - verify metric and event view look ok
+  - store/load selected snapshot state in URL *
+
+- bugs
+  - if a field is present but has no value the label is rendered, but no value
 
 
 ## Project setup

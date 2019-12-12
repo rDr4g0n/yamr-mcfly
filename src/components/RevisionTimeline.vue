@@ -66,7 +66,6 @@ export default {
     const bb = this.$el.getBoundingClientRect()
     this.w = bb.width
     this.h = bb.height
-    console.log(this.w, this.start, this.end)
   }
 }
 

@@ -114,7 +114,7 @@ export default {
       itemName: "testrail.zenoss.loc",
       start: data[0].timestamp,
       end: data[data.length-1].timestamp,
-      revisions: data,
+      revisions: null,
       prevRevision: null,
       selectedRevision: null,
       nextRevision: null,
@@ -149,10 +149,58 @@ export default {
         "M": "Metric",
         "V": "Event",
       }[type]
-    }
+    },
+    async fetchRevisions(){
+      if(!this.itemType || !this.itemId){
+        console.warn("didnt try to fetch", this.itemType, this.itemId)
+        return
+      }
+      console.log("fetching revisions", this.itemType, this.itemId)
+      /*
+      const url = `http://10.87.111.197:8089?id=${this.itemId}&type=${this.itemType}`
+      const resp = await fetch(url)
+      const data = await resp.json()
+      console.log("got data", data)
+      */
+      const revisions = await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(data)
+        }, 2000)
+      })
+
+      // TODO - handle err
+      this.revisions = revisions
+      // TODO - check number of revisions
+      this.selectRevision(this.revisions[this.revisions.length-1])
+    },
+    evaluateHash(){
+      const parts = window.location.hash.split("/")
+      this.itemType = parts[1]
+      this.itemId = parts[2]
+    },
   },
-  mounted(){
-    this.selectRevision(this.revisions[this.revisions.length-1])
+  created(){
+    window.addEventListener("hashchange", (newUrl, oldUrl) => {
+      if(newUrl !== oldUrl){
+        this.evaluateHash()
+      }
+    })
+    document.addEventListener("keyup", e => {
+      const { code } = e
+      if(code === "ArrowLeft" && this.prevRevision){
+        this.selectRevision(this.prevRevision)
+      } else if(code === "ArrowRight" && this.nextRevision){
+        this.selectRevision(this.nextRevision)
+      }
+    })
+  },
+  watch: {
+    itemId: {
+      immediate: true,
+      handler(){
+        this.fetchRevisions()
+      }
+    }
   }
 }
 </script>
