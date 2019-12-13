@@ -1,8 +1,10 @@
 <template>
   <div id="app">
-    <div class="loader" v-if="loading">
-      <div class="loading-spinner">❤</div>
-    </div>
+    <Loader
+      :value="loading"
+      :loadingError="loadingError"
+      @retry="onRetry"
+    />
     <div style="background-color: #111;">
       <div class="item-header-wrap">
         <div class="item-header">
@@ -102,15 +104,19 @@ import Vue from "vue"
 import moment from "moment"
 import RevisionCard from "./components/RevisionCard"
 import RevisionTimeline from "./components/RevisionTimeline"
+import Loader from "./components/Loader"
 
 Vue.filter("toDate", val => moment(val).format("MMMM Do, YYYY"))
 Vue.filter("toTime", val => moment(val).format("h:mm:ss a"))
+
+const REVISIONS_SERVICE_URL = "http://10.87.111.197:8089"
 
 export default {
   name: 'app',
   components: {
     RevisionCard,
     RevisionTimeline,
+    Loader,
   },
   data(){
     return {
@@ -126,6 +132,7 @@ export default {
       diffRevision: null,
       diffRevisionTitle: null,
       loading: false,
+      loadingError: null,
       duration: 1000 * 60 * 60 * 24,
     }
   },
@@ -145,6 +152,7 @@ export default {
         this.nextRevision = null
       }
       const i = this.revisions.indexOf(revision)
+      console.log("selecting revision", revision, "at index", i)
       this.selectedRevision = this.revisions[i]
       this.prevRevision = i ? this.revisions[i-1] : null
       this.nextRevision = i < this.revisions.length ? this.revisions[i+1] : null
@@ -162,22 +170,34 @@ export default {
         "V": "Event",
       }[type]
     },
-    async fetchRevisions(){
-      if(!this.itemType || !this.itemId){
-        console.warn("didnt try to fetch", this.itemType, this.itemId)
+    async fetchRevisions(itemType, itemId){
+      if(!itemType || !itemId){
+        console.warn("didnt try to fetch", itemType, itemId)
         return
       }
       this.loading = true
-      this.end = Date.now()
-      this.start = Date.now() - this.duration
-      console.log("fetching revisions", this.itemType, this.itemId)
-      const url = `http://10.87.111.197:8089/${this.itemType}/${this.itemId}?start=${this.start}`
-      const resp = await fetch(url)
-      const data = await resp.json()
-      data.sort((a, b) => a.timestamp - b.timestamp)
-      this.loading = false
-
-      this.revisions = data || []
+      this.loadingError = null
+      try {
+        this.end = Date.now()
+        this.start = Date.now() - this.duration
+        console.log("fetching revisions", itemType, itemId)
+        const url = `${REVISIONS_SERVICE_URL}/${itemType}/${itemId}?start=${this.start}`
+        const resp = await fetch(url)
+        const data = await resp.json()
+        data.sort((a, b) => a.timestamp - b.timestamp)
+        this.revisions = data || []
+        this.itemType = itemType
+        this.itemId = itemId
+      } catch (e) {
+        this.loadingError = {
+          message: `Failed to load ${itemType}/${itemId}`,
+          retryArgs: [itemType, itemId],
+        }
+        console.error(e)
+        return
+      } finally {
+        this.loading = false
+      }
 
       if(!this.revisions.length){
         this.selectRevision()
@@ -192,9 +212,15 @@ export default {
     },
     evaluateHash(){
       const parts = window.location.hash.split("/")
-      this.itemType = parts[1]
-      this.itemId = parts[2]
+      const [ _, itemType, itemId ] = parts
+      if(itemType !== this.itemType || itemId !== this.itemId){
+        this.fetchRevisions(itemType, itemId)
+      }
     },
+    onRetry(args){
+      const [itemType, itemId] = args
+      this.fetchRevisions(itemType, itemId)
+    }
   },
   created(){
     this.evaluateHash()
@@ -213,16 +239,10 @@ export default {
     })
   },
   watch: {
-    itemId: {
-      immediate: true,
-      handler(){
-        this.fetchRevisions()
-      }
-    },
     duration: {
       immediate: true,
       handler(){
-        this.fetchRevisions()
+        this.fetchRevisions(this.itemType, this.itemId)
       }
     }
   }
@@ -250,6 +270,10 @@ html, body, #app {
   min-height: 100vh;
 }
 
+a {
+  color: var(--action);
+}
+
 #app {
   color: var(--primary-text);
   display: flex;
@@ -258,43 +282,6 @@ html, body, #app {
   background-color: #444;
   width: 100%;
   overflow: hidden;
-}
-
-.loader {
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: rgba(0,0,0,0.8);
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.loading-spinner {
-  color: var(--action);
-  font-size: 200px;
-  animation-duration: 0.5s;
-  animation-name: loader;
-  animation-iteration-count: infinite;
-  animation-timing-function: ease-in-out;
-}
-
-@keyframes loader {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(0.5);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
 }
 
 .revision-timeline-wrap,
