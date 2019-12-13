@@ -39,6 +39,7 @@
             v-if="prevRevision"
             title="Previous Biff"
             :timestamp="prevRevision.timestamp"
+            :exists="prevRevision.exists"
             :itemType="itemType"
             :fields="prevRevision.fields"
             :diffFields="selectedRevision.fields"
@@ -54,6 +55,7 @@
             v-if="selectedRevision"
             title="Selected Revision"
             :timestamp="selectedRevision.timestamp"
+            :exists="selectedRevision.exists"
             :itemType="itemType"
             :fields="selectedRevision.fields"
             :diffFields="selectedRevision.fields"
@@ -67,6 +69,7 @@
             class="compact-revision"
             title="Next Biff"
             :timestamp="nextRevision.timestamp"
+            :exists="nextRevision.exists"
             :itemType="itemType"
             :fields="nextRevision.fields"
             :diffFields="selectedRevision.fields"
@@ -80,16 +83,17 @@
       </div>
     </div>
 
-    <div class="revision-viewer-wrap" v-if="selectedRevision">
-      <div class="selected-revision">
+    <div class="revision-viewer-wrap" v-if="selectedRevision" style="justify-content: center;">
+      <div class="selected-revision" style="max-width: 800px;">
         <RevisionCard
           :title="selectedRevisionTitle"
           :timestamp="selectedRevision.timestamp"
+          :exists="selectedRevision.exists"
           :itemType="itemType"
           :fields="selectedRevision.fields"
           :diffFields="diffRevision ? diffRevision.fields : null"
           :diffOnly="diffOnly"
-          :reverseDiff="!!diffRevision"
+          :reverseDiff="false"
         >
           <template v-slot:actions>
             <div class="action-icon"
@@ -245,23 +249,29 @@ export default {
     onRetry(args){
       const [itemType, itemId] = args
       this.fetchRevisions(itemType, itemId)
-    }
-  },
-  created(){
-    this.evaluateHash()
-    window.addEventListener("hashchange", (newUrl, oldUrl) => {
+    },
+    onHashChange(newUrl, oldUrl){
       if(newUrl !== oldUrl){
         this.evaluateHash()
       }
-    })
-    document.addEventListener("keyup", e => {
+    },
+    onKeyUp(e){
       const { code } = e
       if(code === "ArrowLeft" && this.prevRevision){
         this.selectRevision(this.prevRevision)
       } else if(code === "ArrowRight" && this.nextRevision){
         this.selectRevision(this.nextRevision)
       }
-    })
+    }
+  },
+  created(){
+    this.evaluateHash()
+    window.addEventListener("hashchange", this.onHashChange)
+    document.addEventListener("keyup", this.onKeyUp)
+  },
+  beforeDestroy(){
+    window.removeEventListener("hashchange", this.onHashChange)
+    window.removeEventListener("keyup", this.onKeyUp)
   },
   watch: {
     duration: {

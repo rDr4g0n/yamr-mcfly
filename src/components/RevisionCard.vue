@@ -9,11 +9,13 @@
       <div class="revision-card-time">{{ timestamp | toTime }}</div>
     </div>
     <ItemView
+      v-if="exists"
       :fields="formattedFields"
       :diffOnly="diffOnly"
       :fieldNamesOnly="compact"
       :fieldsMap="fieldsMap"
     />
+    <div v-else>This thing stopped existing. Woah. </div>
   </div>
 </template>
 
@@ -37,6 +39,10 @@ export default {
     itemType: String,
     fields: Object,
     diffFields: Object,
+    exists: {
+      type: Boolean,
+      default: true
+    },
     reverseDiff: {
       type: Boolean,
       default: false
