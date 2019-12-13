@@ -1,5 +1,5 @@
 <template>
-  <div class="events-card">
+  <div class="events-card card">
     <div class="events-card-header">
       <div class="events-card-title">Critical Events ({{ count }})</div>
     </div>
@@ -9,8 +9,8 @@
          :key="item.id"
          :href="item.url"
       >
-        {{ item.eventClass }}<br>
-        {{ item.summary }}
+        <div class="event-class">{{ item.eventClass }}</div>
+        <div class="event-summary">{{ item.summary }}</div>
       </a>
     </div>
   </div>
@@ -41,7 +41,6 @@ export default {
 
 <style scoped>
 .events-card {
-  background-color: var(--card-bg);
   padding: var(--base-margin) calc(var(--base-margin) * 1.5);
 }
 .events-card-header {
@@ -57,5 +56,13 @@ export default {
 .items-list {
   display: flex;
   flex-direction: column;
+}
+
+.event-class {
+  font-weight: bold;
+}
+.event-summary {
+  color: #CCC;
+  padding-bottom: 10px;
 }
 </style>

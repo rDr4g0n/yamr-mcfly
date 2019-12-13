@@ -1,5 +1,5 @@
 <template>
-  <div class="neighbors-card">
+  <div class="neighbors-card card">
     <div class="neighbors-card-header">
       <div class="neighbors-card-title">Neighbors</div>
     </div>
@@ -49,7 +49,6 @@ export default {
 
 <style scoped>
 .neighbors-card {
-  background-color: var(--card-bg);
   padding: var(--base-margin) calc(var(--base-margin) * 1.5);
 }
 .neighbors-card-header {

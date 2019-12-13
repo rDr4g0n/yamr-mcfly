@@ -1,5 +1,5 @@
 <template>
-  <div class="metrics-card">
+  <div class="metrics-card card">
     <div class="metrics-card-header">
       <div class="metrics-card-title">Metrics ({{ count }}) </div>
     </div>
@@ -37,7 +37,6 @@ export default {
 
 <style scoped>
 .metrics-card {
-  background-color: var(--card-bg);
   padding: var(--base-margin) calc(var(--base-margin) * 1.5);
 }
 .metrics-card-header {

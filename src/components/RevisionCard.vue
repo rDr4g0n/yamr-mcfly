@@ -1,5 +1,5 @@
 <template>
-  <div class="revision-card" :class="{ diff: diffOnly, compact: compact }">
+  <div class="revision-card card" :class="{ diff: diffOnly, compact: compact }">
     <div class="revision-card-header">
       <div class="revision-card-title">{{ title }}</div>
       <div class="revision-card-actions"><slot name="actions"></slot></div>
@@ -101,12 +101,6 @@ export default {
 </script>
 
 <style scoped>
-.revision-card {
-  background-color: var(--card-bg);
-  box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.5);
-  width: 100%;
-  height: 100%;
-}
 .revision-card.diff {
   background-color: #333;
   box-shadow: none;

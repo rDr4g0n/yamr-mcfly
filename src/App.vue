@@ -286,6 +286,9 @@ html, body, #app {
 a {
   color: var(--action);
 }
+a:hover {
+  color: var(--action-reverse);
+}
 
 #app {
   color: var(--primary-text);
@@ -454,5 +457,12 @@ a {
   max-height: 500px;
   overflow-x: none;
   overflow-y: auto;
+}
+
+.card {
+  background-color: var(--card-bg);
+  box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
 }
 </style>
