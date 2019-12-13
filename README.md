@@ -2,19 +2,22 @@
 
 ## TODO
 
-- comparison diff is reversed :(
-- events renderer
-- ! event Link fields dont have type set
+- finish events renderer
+- ! event entity Link fields dont have type set (cant follow entity links)
 - special fields callout (neighbors, events, metrics)
   - or at least make them collapsible, scrollable, something
   - or move them down below details
+
+- dont diff on metric/event?
+- toggle prev/next diffs?
+- select a/b to diff in timeline?
+
 - speedometer or flux capacitor animation
 - look at `exists` and do stuff
 - blacklist fields from generating diffs
 - revised fields in timeline *
 - nicely diff array values *
 - store/load selected snapshot state in URL *
-- if a field is present but has no value the label is rendered, but no value
 
 
 ## Project setup

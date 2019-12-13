@@ -63,6 +63,7 @@
           :itemType="itemType"
           :fields="selectedRevision.fields"
           :diffFields="diffRevision ? diffRevision.fields : null"
+          :reverseDiff="!!diffRevision"
         >
           <template v-slot:actions v-if="diffRevision">
             <div class="action-icon" @click="compareRevision()">⨯</div>

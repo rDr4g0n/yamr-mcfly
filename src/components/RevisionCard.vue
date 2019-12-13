@@ -56,24 +56,34 @@ export default {
     itemType: String,
     fields: Object,
     diffFields: Object,
+    reverseDiff: {
+      type: Boolean,
+      default: false
+    },
     diffOnly: {
       type: Boolean,
       default: false
     }
   },
   computed: {
+    fieldsA(){
+      return this.reverseDiff ? this.diffFields : this.fields
+    },
+    fieldsB(){
+      return this.reverseDiff ? this.fields : this.diffFields
+    },
     fieldsMap(){
       return fieldsMapByType(this.itemType)
     },
     formattedFields(){
-      let fields = Object.entries(this.fields)
+      let fields = Object.entries(this.fieldsA)
         .map(([name, value]) => {
           const f = {
             name,
             value: getValue(value)
           }
-          if(this.diffFields){
-            let from = this.diffFields[name]
+          if(this.fieldsB){
+            let from = this.fieldsB[name]
             if(from) {
               from = getValue(from)
             }
@@ -84,12 +94,12 @@ export default {
           return f
         })
       // capture removed fields
-      if(this.diffFields){
+      if(this.fieldsB){
         // look for diffFields which do NOT exist in
         // this.fields
-        Object.entries(this.diffFields)
+        Object.entries(this.fieldsA)
           .forEach(([name, value]) => {
-            if(!this.fields[name]){
+            if(!this.fieldsA[name]){
               fields.push({
                 name,
                 value: null,
