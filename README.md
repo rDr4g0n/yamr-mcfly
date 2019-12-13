@@ -2,6 +2,15 @@
 
 ## TODO
 
+- prev/next wrap
+  - visibly clickable
+  - better appearance of title, time
+  - call out current more distinctly
+  - "no revision" message full height
+- metrics, events, neightbors blobs
+- arbitrary diff selection?
+
+
 - ! event entity Link fields dont have type set (cant follow entity links)
 - special fields callout (neighbors, events, metrics)
   - or at least make them collapsible, scrollable, something

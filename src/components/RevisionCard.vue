@@ -1,5 +1,5 @@
 <template>
-  <div class="revision-card" :class="{ diff: diffOnly }">
+  <div class="revision-card" :class="{ diff: diffOnly, compact: compact }">
     <div class="revision-card-header">
       <div class="revision-card-title">{{ title }}</div>
       <div class="revision-card-actions"><slot name="actions"></slot></div>
@@ -11,6 +11,7 @@
     <ItemView
       :fields="formattedFields"
       :diffOnly="diffOnly"
+      :fieldNamesOnly="compact"
       :fieldsMap="fieldsMap"
     />
   </div>
@@ -18,32 +19,12 @@
 
 <script>
 import ItemView from "./ItemView"
+import fieldsMap from "./fieldsMap"
 
 const isEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b)
 const getValue = value => value.length > 1 ? value : value[0]
 
-const fieldsMapByType = (itemType) => ({
-  E: {
-    "_parents_": "Link",
-    "_children_": "Link",
-    "mem_capacity": "FriendlyNumber",
-    "_metrics_": "Link",
-    "memory": "FriendlyNumber",
-    "cpuMhz": "FriendlyNumber",
-    "totalMemory": "FriendlyNumber",
-    "_events_": "Event"
-  },
-  M: {
-    "_zen_direct_entity_id": "Link",
-  },
-  V: {
-    "_zen_entityIds": "Link",
-    "_zen_parentEntityIds": "Link",
-    "firstSeen": "DateTime",
-    "lastSeen": "DateTime",
-    "updateTime": "DateTime",
-  }
-}[itemType])
+const fieldsMapByType = (itemType) => fieldsMap[itemType]
 
 export default {
   name: 'revision-card',
@@ -61,6 +42,10 @@ export default {
       default: false
     },
     diffOnly: {
+      type: Boolean,
+      default: false
+    },
+    compact: {
       type: Boolean,
       default: false
     }
@@ -117,9 +102,10 @@ export default {
 
 <style scoped>
 .revision-card {
-  background-color: #222;
+  background-color: var(--card-bg);
   box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.5);
   width: 100%;
+  height: 100%;
 }
 .revision-card.diff {
   background-color: #333;
@@ -153,5 +139,33 @@ export default {
 .revision-card-time {
   color: var(--secondary-text);
   font-size: 18px;
+}
+
+.compact .revision-card-datetime {
+  padding: 5px 10px;
+}
+.compact .revision-card-date {
+  font-size: 16px;
+}
+.compact .revision-card-time {
+  font-size: 16px;
+}
+.compact .revision-card-header {
+  padding: 10px;
+  height: auto;
+}
+.compact >>> .item-view {
+  padding: 5px 10px;
+}
+.compact >>> .item-view .field {
+  display: inline-block;
+  margin: 0;
+}
+.compact >>> .item-view .field-key {
+  padding-right: 4px;
+}
+.compact >>> .item-view .field-key:after {
+  content: ", ";
+  font-size: 16px;
 }
 </style>

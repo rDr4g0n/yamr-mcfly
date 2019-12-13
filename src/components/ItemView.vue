@@ -10,6 +10,7 @@
       >
         <div class="field-key">{{ field.name }}</div>
         <component
+          v-if="!fieldNamesOnly"
           :is="componentNameForField(field.name)"
           :field="field"
         />
@@ -35,6 +36,10 @@ export default {
       }
     },
     diffOnly: {
+      type: Boolean,
+      default: false
+    },
+    fieldNamesOnly: {
       type: Boolean,
       default: false
     }

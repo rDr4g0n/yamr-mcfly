@@ -32,68 +32,70 @@
           @selectRevision="selectRevision"
         />
       </div>
-    </div>
 
-    <div class="revision-viewer-wrap">
-      <div class="prev-revision">
-        <div class="revision-mark" @click="selectRevision(prevRevision)">◆</div>
-        <RevisionCard
-          v-if="prevRevision"
-          title="Previous Biff"
-          :timestamp="prevRevision.timestamp"
-          :itemType="itemType"
-          :fields="prevRevision.fields"
-          :diffFields="selectedRevision.fields"
-          :diffOnly="true"
-        >
-          <template v-slot:actions>
-            <div class="action-icon" @click="compareRevision(prevRevision, 'Previous')">±</div>
-            <div class="action-icon" @click="selectRevision(prevRevision)">✓</div>
-          </template>
-        </RevisionCard>
-        <div class="no-revision-message" v-else>
-          <div>No older revisions within this timeframe</div>
+      <div class="revision-nearby-wrap">
+        <div class="prev-revision" @click="selectRevision(prevRevision)">
+          <RevisionCard
+            v-if="prevRevision"
+            title="Previous Biff"
+            :timestamp="prevRevision.timestamp"
+            :itemType="itemType"
+            :fields="prevRevision.fields"
+            :diffFields="selectedRevision.fields"
+            :diffOnly="true"
+            :compact="true"
+          />
+          <div class="no-revision-message compact" v-else>
+            <div>No older revisions within this timeframe</div>
+          </div>
+        </div>
+        <div class="selected-revision compact">
+          <RevisionCard
+            v-if="selectedRevision"
+            :title="selectedRevisionTitle"
+            :timestamp="selectedRevision.timestamp"
+            :itemType="itemType"
+            :fields="selectedRevision.fields"
+            :diffFields="selectedRevision.fields"
+            :reverseDiff="!!diffRevision"
+            :compact="true"
+          />
+        </div>
+        <div class="next-revision" @click="selectRevision(nextRevision)">
+          <RevisionCard
+            v-if="nextRevision"
+            class="compact-revision"
+            title="Next Biff"
+            :timestamp="nextRevision.timestamp"
+            :itemType="itemType"
+            :fields="nextRevision.fields"
+            :diffFields="selectedRevision.fields"
+            :diffOnly="true"
+            :compact="true"
+          />
+          <div class="no-revision-message compact" v-else>
+            <div>No newer revisions within this timeframe</div>
+          </div>
         </div>
       </div>
+    </div>
+
+    <div class="revision-viewer-wrap" v-if="selectedRevision">
       <div class="selected-revision">
-        <div class="revision-mark selected">◆</div>
         <RevisionCard
-          :class="{'is-comparing': diffRevision}"
-          v-if="selectedRevision"
           :title="selectedRevisionTitle"
           :timestamp="selectedRevision.timestamp"
           :itemType="itemType"
           :fields="selectedRevision.fields"
           :diffFields="diffRevision ? diffRevision.fields : null"
           :reverseDiff="!!diffRevision"
-        >
-          <template v-slot:actions v-if="diffRevision">
-            <div class="action-icon" @click="compareRevision()">⨯</div>
-          </template>
-        </RevisionCard>
+        />
       </div>
-      <div class="next-revision">
-        <div class="revision-mark" @click="selectRevision(nextRevision)">◆</div>
-        <RevisionCard
-          v-if="nextRevision"
-          class="compact-revision"
-          title="Next Biff"
-          :timestamp="nextRevision.timestamp"
-          :itemType="itemType"
-          :fields="nextRevision.fields"
-          :diffFields="selectedRevision.fields"
-          :diffOnly="true"
-        >
-          <template v-slot:actions>
-            <div class="action-icon" @click="compareRevision(nextRevision, 'Next')">±</div>
-            <div class="action-icon" @click="selectRevision(nextRevision)">✓</div>
-          </template>
-        </RevisionCard>
-        <div class="no-revision-message" v-else>
-          <div>No newer revisions within this timeframe</div>
-        </div>
+      <div class="additional-revision-tiles">
+        <NeighborsCard :neighbors="selectedRevision.neighbors" />
+        <EventsCard :events="selectedRevision.events" />
+        <MetricsCard :metrics="selectedRevision.metrics" />
       </div>
-      <div class="revision-marks-line"></div>
     </div>
   </div>
 
@@ -104,6 +106,9 @@ import Vue from "vue"
 import moment from "moment"
 import RevisionCard from "./components/RevisionCard"
 import RevisionTimeline from "./components/RevisionTimeline"
+import EventsCard from "./components/EventsCard"
+import MetricsCard from "./components/MetricsCard"
+import NeighborsCard from "./components/NeighborsCard"
 import Loader from "./components/Loader"
 
 Vue.filter("toDate", val => moment(val).format("MMMM Do, YYYY"))
@@ -117,6 +122,9 @@ export default {
     RevisionCard,
     RevisionTimeline,
     Loader,
+    EventsCard,
+    MetricsCard,
+    NeighborsCard,
   },
   data(){
     return {
@@ -130,7 +138,6 @@ export default {
       selectedRevision: null,
       nextRevision: null,
       diffRevision: null,
-      diffRevisionTitle: null,
       loading: false,
       loadingError: null,
       duration: 1000 * 60 * 60 * 24,
@@ -138,10 +145,7 @@ export default {
   },
   computed: {
     selectedRevisionTitle(){
-      if(this.diffRevisionTitle){
-        return `Comparing Selected and ${this.diffRevisionTitle} Revision`
-      }
-      return "Selected Revision"
+      return this.diffRevisionTitle || "Selected Revision"
     }
   },
   methods: {
@@ -156,8 +160,16 @@ export default {
       this.selectedRevision = this.revisions[i]
       this.prevRevision = i ? this.revisions[i-1] : null
       this.nextRevision = i < this.revisions.length ? this.revisions[i+1] : null
-      // reset any comparison junk
-      this.compareRevision()
+
+      if(this.prevRevision){
+        // automatically diff against prev
+        const title = `Selected Revision (Biffed Against Previous Revision)`
+        this.compareRevision(this.prevRevision, title)
+
+      } else {
+        // reset any comparison junk
+        this.compareRevision()
+      }
     },
     compareRevision(revision, title){
       this.diffRevision = revision
@@ -264,6 +276,7 @@ export default {
   --base-margin: 10px;
   --action: cyan;
   --action-reverse: white;
+  --card-bg: #222;
 }
 
 html, body, #app {
@@ -285,7 +298,9 @@ a {
 }
 
 .revision-timeline-wrap,
-.item-header-wrap {
+.item-header-wrap,
+.review-viewer-wrap,
+.revision-nearby-wrap {
   width: 100%;
   max-width: 800px;
   margin: 0 auto 20px auto;
@@ -321,6 +336,7 @@ a {
 }
 
 .revision-viewer-wrap {
+  padding: 20px;
   position: relative;
   flex: 1;
   width: 100%;
@@ -389,6 +405,9 @@ a {
   color: var(--secondary-text);
   border: solid var(--secondary-text) 1px;
 }
+.no-revision-message.compact {
+  height: 50px;
+}
 
 .action-icon {
   cursor: pointer;
@@ -403,5 +422,29 @@ a {
   color: var(--action);
 }
 
+.selected-revision.compact .item-view {
+  display: none;
+}
 
+.revision-nearby-wrap {
+  align-items: stretch;
+}
+.revision-nearby-wrap {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+}
+.revision-nearby-wrap .prev-revision,
+.revision-nearby-wrap .next-revision {
+  flex: 1;
+}
+
+.additional-revision-tiles {
+  flex: 0 0 400px;
+  padding-left: 10px;
+}
+.additional-revision-tiles > * {
+  margin-bottom: 20px;
+}
 </style>
