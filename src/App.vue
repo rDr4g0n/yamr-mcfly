@@ -88,8 +88,16 @@
           :itemType="itemType"
           :fields="selectedRevision.fields"
           :diffFields="diffRevision ? diffRevision.fields : null"
+          :diffOnly="diffOnly"
           :reverseDiff="!!diffRevision"
-        />
+        >
+          <template v-slot:actions>
+            <div class="action-icon"
+              :class="{ toggled: diffOnly }"
+              @click="diffOnly = !diffOnly"
+            >±</div>
+          </template>
+        </RevisionCard>
       </div>
       <div class="additional-revision-tiles" v-if="itemType === 'E'">
         <NeighborsCard :neighbors="selectedRevision.neighbors" />
@@ -141,6 +149,7 @@ export default {
       loading: false,
       loadingError: null,
       duration: 1000 * 60 * 60 * 24,
+      diffOnly: false,
     }
   },
   computed: {
@@ -417,7 +426,7 @@ a:hover {
 
 .action-icon {
   cursor: pointer;
-  padding: 5px;
+  padding: 2px 5px;
   width: 25px;
   height: 25px;
   text-align: center;
@@ -426,6 +435,9 @@ a:hover {
 }
 .action-icon:hover {
   color: var(--action);
+}
+.action-icon.toggled {
+  background-color: black;
 }
 
 .selected-revision.compact .item-view {
