@@ -88,7 +88,7 @@ export default {
       if(this.fieldsB){
         // look for diffFields which do NOT exist in
         // this.fields
-        Object.entries(this.fieldsA)
+        Object.entries(this.fieldsB)
           .forEach(([name, value]) => {
             if(!this.fieldsA[name]){
               fields.push({
