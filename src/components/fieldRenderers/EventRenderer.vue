@@ -93,16 +93,20 @@ export default {
   color: var(--action-reverse);
 }
 
-.unstyle-link {
+.unstyled-link {
   display: flex;
+  text-decoration: none;
+}
+.unstyled-link:hover {
+  color: var(--action);
+  text-decoration: underline;
 }
 .event-class {
   color: var(--secondary-text);
-  text-decoration: none;
   font-weight: bold;
+  margin-right: 5px;
 }
 .event-summary {
   color: white;
-  text-decoration: none;
 }
 </style>

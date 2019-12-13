@@ -2,12 +2,12 @@
 
 ## TODO
 
-- finish events renderer
 - ! event entity Link fields dont have type set (cant follow entity links)
 - special fields callout (neighbors, events, metrics)
   - or at least make them collapsible, scrollable, something
-  - or move them down below details
+  - or move them down below details (Separate handling)
 
+- dont swap type/id till request finished
 - dont diff on metric/event?
 - toggle prev/next diffs?
 - select a/b to diff in timeline?
