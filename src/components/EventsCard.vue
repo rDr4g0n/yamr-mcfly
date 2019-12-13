@@ -1,9 +1,18 @@
 <template>
   <div class="events-card">
     <div class="events-card-header">
-      <div class="events-card-title">Events</div>
+      <div class="events-card-title">Critical Events ({{ count }})</div>
     </div>
-    {{ events && events.length }}
+    <div class="items-list">
+      <a
+         v-for="item in formattedItems"
+         :key="item.id"
+         :href="item.url"
+      >
+        {{ item.eventClass }}<br>
+        {{ item.summary }}
+      </a>
+    </div>
   </div>
 </template>
 
@@ -12,6 +21,20 @@ export default {
   name: "events-card",
   props: {
     events: Array
+  },
+  computed: {
+    count(){
+      return this.events ? this.events.length : "-"
+    },
+    formattedItems(){
+      const items = this.events || []
+      return items.map(item => ({
+        id: item.id,
+        summary: item.summary,
+        eventClass: item.eventClass,
+        url: `/#/${item.type}/${item.id}`
+      }))
+    }
   }
 }
 </script>
@@ -30,5 +53,9 @@ export default {
 .events-card-title {
   color: var(--secondary-text);
   font-style: italic;
+}
+.items-list {
+  display: flex;
+  flex-direction: column;
 }
 </style>

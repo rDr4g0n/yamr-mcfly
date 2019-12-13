@@ -1,9 +1,15 @@
 <template>
   <div class="metrics-card">
     <div class="metrics-card-header">
-      <div class="metrics-card-title">Metrics</div>
+      <div class="metrics-card-title">Metrics ({{ count }}) </div>
     </div>
-    {{ metrics && metrics.length }}
+    <div class="items-list">
+      <a
+         v-for="item in formattedItems"
+         :key="item.id"
+         :href="item.url"
+      >{{ item.name }}</a>
+    </div>
   </div>
 </template>
 
@@ -12,6 +18,19 @@ export default {
   name: "metrics-card",
   props: {
     metrics: Array
+  },
+  computed: {
+    count(){
+      return this.metrics ? this.metrics.length : "-"
+    },
+    formattedItems(){
+      const items = this.metrics || []
+      return items.map(item => ({
+        id: item.id,
+        name: item.name,
+        url: `/#/${item.type}/${item.id}`
+      }))
+    }
   }
 }
 </script>
@@ -30,5 +49,9 @@ export default {
 .metrics-card-title {
   color: var(--secondary-text);
   font-style: italic;
+}
+.items-list {
+  display: flex;
+  flex-direction: column;
 }
 </style>

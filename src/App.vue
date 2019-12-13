@@ -442,9 +442,17 @@ a {
 
 .additional-revision-tiles {
   flex: 0 0 400px;
+  overflow: hidden;
   padding-left: 10px;
 }
 .additional-revision-tiles > * {
   margin-bottom: 20px;
+  width: 100%;
+}
+
+.additional-revision-tiles .items-list {
+  max-height: 500px;
+  overflow-x: none;
+  overflow-y: auto;
 }
 </style>

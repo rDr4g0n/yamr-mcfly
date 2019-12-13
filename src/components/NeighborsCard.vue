@@ -3,7 +3,20 @@
     <div class="neighbors-card-header">
       <div class="neighbors-card-title">Neighbors</div>
     </div>
-    {{ neighbors && neighbors.length }}
+    <div class="items-list">
+      <div class="neighbor-direction-label">Upstairs</div>
+      <a
+         v-for="item in formattedParentItems"
+         :key="item.id"
+         :href="item.url"
+      >{{ item.name }}</a><br>
+      <div class="neighbor-direction-label">Downstairs</div>
+      <a
+         v-for="item in formattedChildItems"
+         :key="item.id"
+         :href="item.url"
+      >{{ item.name }}</a>
+    </div>
   </div>
 </template>
 
@@ -12,6 +25,24 @@ export default {
   name: "neighbors-card",
   props: {
     neighbors: Array
+  },
+  computed: {
+    formattedParentItems(){
+      const items = this.neighbors ? this.neighbors.parents : []
+      return items.map(item => ({
+        id: item.id,
+        name: item.name,
+        url: `/#/${item.type}/${item.id}`
+      }))
+    },
+    formattedChildItems(){
+      const items = this.neighbors ? this.neighbors.children : []
+      return items.map(item => ({
+        id: item.id,
+        name: item.name,
+        url: `/#/${item.type}/${item.id}`
+      }))
+    }
   }
 }
 </script>
@@ -30,5 +61,15 @@ export default {
 .neighbors-card-title {
   color: var(--secondary-text);
   font-style: italic;
+}
+.items-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.neighbor-direction-label {
+  font-size: 12px;
+  color: var(--secondary-text);
+  padding-bottom: 4px;
 }
 </style>
