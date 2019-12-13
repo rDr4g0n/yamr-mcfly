@@ -1,10 +1,6 @@
 # mcfly-primo-yamr-delorean
 
 ## TODO
-- improve appearance of prev/next nav
-  - further minimize timestamp
-  - make fields more visible
-  - interaction, clickable, etc
 - grab name from first revision if its not on the last revision
 
 -----------------------

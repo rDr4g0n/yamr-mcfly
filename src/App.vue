@@ -52,7 +52,7 @@
         <div class="selected-revision compact">
           <RevisionCard
             v-if="selectedRevision"
-            :title="selectedRevisionTitle"
+            title="Selected Revision"
             :timestamp="selectedRevision.timestamp"
             :itemType="itemType"
             :fields="selectedRevision.fields"
@@ -150,12 +150,16 @@ export default {
   },
   methods: {
     selectRevision(revision){
+      const i = this.revisions.indexOf(revision)
+      if(i === -1) {
+        console.log("couldnt find revison")
+        return
+      }
       if(!revision){
         this.selectedRevision = null
         this.prevRevision = null
         this.nextRevision = null
       }
-      const i = this.revisions.indexOf(revision)
       console.log("selecting revision", revision, "at index", i)
       this.selectedRevision = this.revisions[i]
       this.prevRevision = i ? this.revisions[i-1] : null
@@ -403,13 +407,12 @@ a:hover {
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 10px;
-  height: 200px;
+  padding: 10px 40px;
+  text-align: center;
+  height: 100%;
   color: var(--secondary-text);
   border: solid var(--secondary-text) 1px;
-}
-.no-revision-message.compact {
-  height: 50px;
+  cursor: default;
 }
 
 .action-icon {
@@ -430,17 +433,23 @@ a:hover {
 }
 
 .revision-nearby-wrap {
-  align-items: stretch;
-}
-.revision-nearby-wrap {
   position: relative;
   flex: 1;
   display: flex;
   align-items: stretch;
 }
-.revision-nearby-wrap .prev-revision,
-.revision-nearby-wrap .next-revision {
+.prev-revision,
+.next-revision {
   flex: 1;
+  cursor: pointer;
+}
+.revision-nearby-wrap .selected-revision .revision-card {
+  background-color: black;
+}
+
+.prev-revision .revision-card:hover,
+.next-revision .revision-card:hover {
+  background-color: #333;
 }
 
 .additional-revision-tiles {

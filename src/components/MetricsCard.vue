@@ -38,6 +38,7 @@ export default {
 <style scoped>
 .metrics-card {
   padding: var(--base-margin) calc(var(--base-margin) * 1.5);
+  padding-top: 0;
 }
 .metrics-card-header {
   display: flex;

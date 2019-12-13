@@ -62,6 +62,7 @@ export default {
 <style scoped>
 .neighbors-card {
   padding: var(--base-margin) calc(var(--base-margin) * 1.5);
+  padding-top: 0;
 }
 .neighbors-card-header {
   display: flex;

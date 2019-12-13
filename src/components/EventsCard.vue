@@ -42,6 +42,7 @@ export default {
 <style scoped>
 .events-card {
   padding: var(--base-margin) calc(var(--base-margin) * 1.5);
+  padding-top: 0;
 }
 .events-card-header {
   display: flex;

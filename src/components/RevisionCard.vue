@@ -101,11 +101,6 @@ export default {
 </script>
 
 <style scoped>
-.revision-card.diff {
-  background-color: #333;
-  box-shadow: none;
-}
-
 .revision-card-header {
   display: flex;
   justify-content: space-between;
@@ -136,7 +131,8 @@ export default {
 }
 
 .compact .revision-card-datetime {
-  padding: 5px 10px;
+  padding: 2px 10px;
+  flex-direction: column;
 }
 .compact .revision-card-date {
   font-size: 16px;
@@ -146,6 +142,7 @@ export default {
 }
 .compact .revision-card-header {
   padding: 10px;
+  padding-bottom: 0;
   height: auto;
 }
 .compact >>> .item-view {
@@ -157,9 +154,10 @@ export default {
 }
 .compact >>> .item-view .field-key {
   padding-right: 4px;
+  font-size: 16px;
+  color: white;
 }
 .compact >>> .item-view .field-key:after {
   content: ", ";
-  font-size: 16px;
 }
 </style>
