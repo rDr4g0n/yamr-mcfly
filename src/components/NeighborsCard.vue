@@ -1,16 +1,16 @@
 <template>
   <div class="neighbors-card card">
     <div class="neighbors-card-header">
-      <div class="neighbors-card-title">Neighbors</div>
+      <div class="neighbors-card-title">Neighbors ({{ upstairsCount + downstairsCount }})</div>
     </div>
     <div class="items-list">
-      <div class="neighbor-direction-label">Upstairs</div>
+      <div class="neighbor-direction-label">Upstairs ({{ upstairsCount }})</div>
       <a
          v-for="item in formattedParentItems"
          :key="item.id"
          :href="item.url"
       >{{ item.name }}</a><br>
-      <div class="neighbor-direction-label">Downstairs</div>
+      <div class="neighbor-direction-label">Downstairs ({{ downstairsCount }})</div>
       <a
          v-for="item in formattedChildItems"
          :key="item.id"
@@ -24,20 +24,32 @@
 export default {
   name: "neighbors-card",
   props: {
-    neighbors: Array
+    neighbors: Object
   },
   computed: {
+    upstairsCount(){
+      return this.parents.length
+    },
+    downstairsCount(){
+      return this.children.length
+    },
+    parents(){
+      return this.neighbors && this.neighbors.parents ?
+        this.neighbors.parents : []
+    },
+    children(){
+      return this.neighbors && this.neighbors.children ?
+        this.neighbors.children : []
+    },
     formattedParentItems(){
-      const items = this.neighbors ? this.neighbors.parents : []
-      return items.map(item => ({
+      return this.parents.map(item => ({
         id: item.id,
         name: item.name,
         url: `/#/${item.type}/${item.id}`
       }))
     },
     formattedChildItems(){
-      const items = this.neighbors ? this.neighbors.children : []
-      return items.map(item => ({
+      return this.children.map(item => ({
         id: item.id,
         name: item.name,
         url: `/#/${item.type}/${item.id}`

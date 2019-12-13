@@ -91,7 +91,7 @@
           :reverseDiff="!!diffRevision"
         />
       </div>
-      <div class="additional-revision-tiles">
+      <div class="additional-revision-tiles" v-if="itemType === 'E'">
         <NeighborsCard :neighbors="selectedRevision.neighbors" />
         <EventsCard :events="selectedRevision.events" />
         <MetricsCard :metrics="selectedRevision.metrics" />
@@ -146,7 +146,7 @@ export default {
   computed: {
     selectedRevisionTitle(){
       return this.diffRevisionTitle || "Selected Revision"
-    }
+    },
   },
   methods: {
     selectRevision(revision){
