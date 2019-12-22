@@ -6,17 +6,17 @@
 -----------------------
 
 - look at `exists` and do stuff
-- prev/next wrap
-  - visibly clickable
-  - better appearance of title, time
-  - call out current more distinctly
-  - "no revision" message full height
+    - make prev/next diff make sense
+    - make selected revision make sense
+    - show !exists periods in timeline
 - arbitrary diff selection?
 - ! event entity Link fields dont have type set (cant follow entity links)
-- select a/b to diff in timeline?
-- blacklist fields from generating diffs
-- nicely diff array values *
-- store/load selected snapshot state in URL *
+- blacklist fields from generating diffs (or whitelist)
+- nicely diff array values
+- push more state to URL
+    - selected snapshot
+    - timerange
+- cache http requests
 
 
 ## Project setup
